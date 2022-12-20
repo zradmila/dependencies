@@ -1,14 +1,106 @@
-# dependencies
+# Dependencies management 
 
 **Introduction**
 
-\dot What is Docker, and how it differs from dependencies management systems? From virtual machines?  
-Docker is an open platform for developing, shipping, and running applications. Docker provides the ability to package and run an application in a loosely isolated environment called a container. The isolation and security allows you to run many containers simultaneously on a given host. Containers are lightweight and contain everything needed to run the application, so you do not need to rely on what is currently installed on the host. You can easily share containers while you work, and be sure that everyone you share with gets the same container that works in the same way.
+## Theory [2]
 
-`conda install -c bioconda fastqc=0.11.9`    
-`conda install -c bioconda star=2.7.10b`    
-`conda install -c bioconda bedtools=2.7.10b`     
-`conda install -c bioconda multiqc=1.13`     
-`conda install -c conda-forge -c bioconda samtools=1.16.1`    
-`conda install -c  bioconda picard=2.27.4`    
-`conda install -c  bioconda salmon`  
+As usual, we will start with a few theoretical questions:
+
+* [0.5] What is Docker, and how it differs from dependencies management systems? From virtual machines?    
+Docker is an open platform for developing, shipping, and running applications. Docker provides the ability to package and run an application in a loosely isolated environment called a container. The isolation and security allows to run many containers simultaneously on a given host. Containers are lightweight and contain everything needed to run the application, so there is no need to rely on what is currently installed on the host. It provides an easy way to share containers while working, and be sure that everyone who uses it gets the same container that works in the same way.
+
+Docker is a technology for creating and managing containers
+* [0.5] What are the advantages and disadvantages of using containers over other approaches?  
+ **Advantages**  
+ **Disadvantages**  
+
+* [0.5] Explain how Docker works: what are Dockerfiles, how are containers created, and how are they run and destroyed?  
+
+ **Dockerfile** is a text document that contains all the commands a user could call on the command line to assemble an image. Docker can build images automatically by reading the instructions from a Dockerfile.  
+   
+ **Image** is a read-only template with instructions for creating a Docker container. Often, an image is based on another image, with some additional customization. It is possible to create your own images or use those created by others and published in a registry. To build your own image, you create a Dockerfile with a simple syntax for defining the steps needed to create the image and run it. Each instruction in a Dockerfile creates a layer in the image. When you change the Dockerfile and rebuild the image, only those layers which have changed are rebuilt. This is part of what makes images so lightweight, small, and fast, when compared to other virtualization technologies.  
+
+ **Container** is a runnable instance of an image. We can create, start, stop, move, or delete a container using the Docker API or CLI. You can connect a container to one or more networks, attach storage to it, or even create a new image based on its current state.
+By default, a container is relatively well isolated from other containers and its host machine. You can control how isolated a container’s network, storage, or other underlying subsystems are from other containers or from the host machine.
+A container is defined by its image as well as any configuration options you provide to it when you create or start it. When a container is removed, any changes to its state that are not stored in persistent storage disappear.  
+
+* [0.25] Name and describe at least one Docker competitor (i.e., a tool based on the same containerization technology).  
+
+* [0.25] What is conda? How it differs from apt, yarn, and others?   
+  **Conda** is an open source package management system and environment management system.   
+  In comparison to other package manageres, conda can work locally. It can work for each user independently and does not require admin's permission.
+
+## Problem [6.5]
+
+The problem itself is relatively simple. 
+
+Imagine that you developed an excellent RNA-seq analysis pipeline and want to share it with the world. Based on your experience, you are confident that the popularity of the pipeline will be proportional to its ease of use. So, you decided to help your future users and to pack all dependencies in a Conda environment and a Docker container.
+
+Here is the list of tools and their versions that are used in your work:
+* [fastqc](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), v0.11.9
+* [STAR](https://github.com/alexdobin/STAR), v2.7.10b
+* [reat](https://github.com/alnfedorov/reat), commit ee19bc928badd227975410a6b8b715c0e03bd4ab 
+* [samtools](https://github.com/samtools/samtools), v1.16.1
+* [picard](https://github.com/broadinstitute/picard), v2.27.5
+* [salmon](https://github.com/COMBINE-lab/salmon), commit tag 1.9.0
+* [bedtools](https://github.com/arq5x/bedtools2), v2.30.0
+* [multiqc](https://github.com/ewels/MultiQC), v1.13
+
+**Anaconda**:
+
+* [1] Install conda, create a new virtual environment, and install all necessary packages. 
+* [0.75] You won't be able to install some tools - that's fine. List their names, and explain what should be done to make them conda-friendly ([conda-forge](https://conda-forge.org/docs/maintainer/adding_pkgs.html) channel, [bioconda](https://bioconda.github.io/contributor/workflow.html) channel). 
+* [0.25] [Export](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#exporting-the-environment-yml-file) the environment ([example](https://github.com/nf-core/clipseq/blob/master/environment.yml)) to the file and verify that it can be [rebuilt](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-from-an-environment-yml-file) from the file without problems.
+
+-----
+## Conda installation 
+Instructions for installation were derived from this [page](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html)
+
+## New environment creation 
+A new environment were created with this command
+```
+conda create env -n zaikina_env
+```
+Then the environment was activated by
+```
+conda activate zaikina env
+```
+## Bioinformatics tools installation
+For a proper installation, bioconda and conda-forge channels were used.
+```
+conda install -c bioconda fastqc=0.11.9   
+conda install -c bioconda star=2.7.10b    
+conda install -c bioconda bedtools=v2.30.0     
+conda install -c bioconda multiqc=1.13       
+conda install -c conda-forge -c bioconda samtools=1.16.1   
+conda install -c  bioconda picard=2.27.4  
+conda install -c  bioconda salmon
+```
+I had to lower the version of picard because dowload just freezed. The same thing was with salmon tool, so I installed the available version of this tool.
+
+## Environment export 
+Created environment was exported with this command:
+```
+conda env export --from-history > zaikina_env.yml
+```
+Then my environment was deactivated and removed:
+```
+conda deactivate 
+conda remove -n zaikina_env --all
+```
+
+## Rebuild conda environment  
+To rebuild environment from a file:
+```
+conda env create -f zaikina_env.yml
+``` 
+
+**Docker**:
+* [3] Create a Dockerfile for a container with **all** required dependencies. Don't forget about comments; test that all tools are accessible and work inside the container. Hints:
+ - If needed, grant rights to execute downloaded/compiled binaries using chmod (`chmod a+x BINARY_NAME`)
+ - Move all executables to $PATH folders (e.g.`/usr/local/bin`) to make them accessible without specifying the full path.
+ - Typical command to run a container interactively (`-it`) and delete on exit(`--rm`): `docker run --rm -it name:tag`
+* [1] Use [hadolint](https://hadolint.github.io/hadolint/) and remove as many reported warnings as possible.
+* [0.5] Add relevant [labels](https://docs.docker.com/engine/reference/builder/#label), e.g. maintainer, version, etc. ([hint](https://medium.com/@chamilad/lets-make-your-docker-image-better-than-90-of-existing-ones-8b1e5de950d))
+
+In a text editor, I created a Dockerfile with all command that should be run to install required packages.

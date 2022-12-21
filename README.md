@@ -104,3 +104,188 @@ conda env create -f zaikina_env.yml
 * [0.5] Add relevant [labels](https://docs.docker.com/engine/reference/builder/#label), e.g. maintainer, version, etc. ([hint](https://medium.com/@chamilad/lets-make-your-docker-image-better-than-90-of-existing-ones-8b1e5de950d))
 
 In a text editor, I created a Dockerfile with all command that should be run to install required packages.
+```
+FROM ubuntu
+
+RUN apt-get update \
+  && apt-get install -y apt-utils \
+  && apt-get install -y wget \
+  && apt-get install -y unzip \
+  && apt-get install -y python3-pip \
+  && apt-get install -y openjdk-11-jre-headless
+
+RUN touch /root/.bashrc
+
+# fastqc installation
+RUN wget https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.9.zip \
+  && unzip fastqc_v0.11.9.zip \
+      && rm fastqc_v0.11.9.zip \
+      && chmod a+x FastQC/fastqc \
+      && echo 'alias fastqc="/FastQC/fastqc"' >> ~/.bashrc
+
+# star installation
+RUN wget https://github.com/alexdobin/STAR/releases/download/2.7.10b/STAR_2.7.10b.zip \
+  && unzip STAR_2.7.10b.zip \
+      && rm STAR_2.7.10b.zip \
+      && chmod a+x STAR_2.7.10b/Linux_x86_64_static/STAR \
+      && mv STAR_2.7.10b/Linux_x86_64_static/STAR /bin/STAR \
+      && rm -r STAR_2.7.10b
+    
+# samtools installation
+RUN wget https://github.com/samtools/samtools/archive/refs/tags/1.16.1.zip -O ./samtools-1.16.1.zip \
+  && unzip samtools-1.16.1.zip \
+      && rm samtools-1.16.1.zip \
+  && mv samtools-1.16.1/misc samtools \
+      && rm -r samtools-1.16.1 \
+      && echo 'alias samtools="/samtools/samtools.pl"' >> ~/.bashrc
+
+# picard installation
+RUN wget https://github.com/broadinstitute/picard/releases/download/2.27.5/picard.jar -O /bin/picard.jar \
+  && chmod a+x /bin/picard.jar \
+      && echo 'alias picard="java -jar /bin/picard.jar"' >> ~/.bashrc
+
+# salmon installation
+RUN wget https://github.com/COMBINE-lab/salmon/releases/download/v1.9.0/salmon-1.9.0_linux_x86_64.tar.gz \
+  && tar -zxvf salmon-1.9.0_linux_x86_64.tar.gz \
+  && rm salmon-1.9.0_linux_x86_64.tar.gz \
+      && chmod a+x salmon-1.9.0_linux_x86_64/bin/salmon \
+      && mv salmon-1.9.0_linux_x86_64/bin/salmon /bin/salmon \
+      && rm -r salmon-1.9.0_linux_x86_64 
+
+# bedtools installation
+RUN wget https://github.com/arq5x/bedtools2/releases/download/v2.30.0/bedtools.static.binary -O /bin/bedtools.static.binary \
+      && chmod a+x /bin/bedtools.static.binary \
+      && echo 'alias bedtools="/bin/bedtools.static.binary"' >> ~/.bashrc
+  
+# multiqc installation
+RUN pip install multiqc==1.13
+```
+## Docker build 
+```
+docker build -t boinf_tools .
+```
+`-t` - the image name
+`.` - means that a Dockerfile is in a current directory 
+
+## Docker run 
+To run a container interactively (`-it`) and delete on exit(`--rm`)
+```
+docker run --rm -it bioinf_tools
+```
+## Dockerfile linter 
+Linter specified that it is importnat to tag the version of an image explicitly.
+In addition, this message was provided:
+```
+Pin versions in apt get install. Instead of `apt-get install <package>` use `apt-get install <package>=<version>`
+Delete the apt-get lists after installing something
+Avoid additional packages by specifying `--no-install-recommends`
+```
+I also added some labels at the beginning of the file with maintainer, version and description information.
+So, the improved version of my Dockerfile looks like this:
+```
+# Base Image 
+FROM ubuntu:20.04
+
+# Metadata
+LABEL maintainer=<zaikinaradmila@gmail.com>
+LABEL version="1.0"
+LABEL description="Docker container for bioinformatic tools"
+
+# Required packages
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends apt-utils=2.0.2ubuntu0.2  \
+  && apt-get install -y --no-install-recommends wget=1.19.4-1ubuntu2.2 \
+  && apt-get install -y --no-install-recommends unzip=6.0-25ubuntu1.1 \
+  && apt-get install -y --no-install-recommends python3-pip=20.0.2-5ubuntu1.5 \
+  && apt-get install -y --no-install-recommends openjdk-11-jre-headless=11.0.17+8-1ubuntu2~20.04 \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN touch /root/.bashrc
+
+# fastqc installation
+RUN wget https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.9.zip \
+  && unzip fastqc_v0.11.9.zip \
+      && rm fastqc_v0.11.9.zip \
+      && chmod a+x FastQC/fastqc \
+      && echo 'alias fastqc="/FastQC/fastqc"' >> ~/.bashrc
+
+# star installation
+RUN wget https://github.com/alexdobin/STAR/releases/download/2.7.10b/STAR_2.7.10b.zip \
+  && unzip STAR_2.7.10b.zip \
+      && rm STAR_2.7.10b.zip \
+      && chmod a+x STAR_2.7.10b/Linux_x86_64_static/STAR \
+      && mv STAR_2.7.10b/Linux_x86_64_static/STAR /bin/STAR \
+      && rm -r STAR_2.7.10b
+    
+# samtools installation
+RUN wget https://github.com/samtools/samtools/archive/refs/tags/1.16.1.zip -O ./samtools-1.16.1.zip \
+  && unzip samtools-1.16.1.zip \
+      && rm samtools-1.16.1.zip \
+  && mv samtools-1.16.1/misc samtools \
+      && rm -r samtools-1.16.1 \
+      && echo 'alias samtools="/samtools/samtools.pl"' >> ~/.bashrc
+
+# picard installation
+RUN wget https://github.com/broadinstitute/picard/releases/download/2.27.5/picard.jar -O /bin/picard.jar \
+  && chmod a+x /bin/picard.jar \
+      && echo 'alias picard="java -jar /bin/picard.jar"' >> ~/.bashrc
+
+# salmon installation
+RUN wget https://github.com/COMBINE-lab/salmon/releases/download/v1.9.0/salmon-1.9.0_linux_x86_64.tar.gz \
+  && tar -zxvf salmon-1.9.0_linux_x86_64.tar.gz \
+  && rm salmon-1.9.0_linux_x86_64.tar.gz \
+      && chmod a+x salmon-1.9.0_linux_x86_64/bin/salmon \
+      && mv salmon-1.9.0_linux_x86_64/bin/salmon /bin/salmon \
+      && rm -r salmon-1.9.0_linux_x86_64 
+
+# bedtools installation
+RUN wget https://github.com/arq5x/bedtools2/releases/download/v2.30.0/bedtools.static.binary -O /bin/bedtools.static.binary \
+      && chmod a+x /bin/bedtools.static.binary \
+      && echo 'alias bedtools="/bin/bedtools.static.binary"' >> ~/.bashrc
+  
+# multiqc installation
+RUN pip install multiqc==1.13
+```
+
+-----
+
+## Extra points [1.5]
+
+You will be awarded extra points for the following:
+* [0.5] Using [multi-stage builds](https://docs.docker.com/build/building/multi-stage/) in Docker. E.g. to build STAR and copy only the executable to the final image.
+
+------
+* [0.75] Minimizing the size of the final Docker image. That is, removing all intermediates, unnecessary binaries/caches, etc. Don't forget to compare & report the final size before and after all the optimizations.
+
+```
+docker build --no-cache -t docker_extra .
+```
+The best I could get was:
+
+Original Dockerfile size: 
+
+Minimized Dockerfile size: 
+
+-----
+* [0.25] Create an extra Dockerfile that starts from [a conda base image](https://hub.docker.com/r/continuumio/anaconda3) and builds everything from your conda environment file. 
+
+Hint: `conda env create --quiet -f environment.yml && conda clean -a` ([example](https://github.com/nf-core/clipseq/blob/master/Dockerfile))
+
+Dockerfile for conda:
+
+```
+# Base Image
+FROM continuumio/anaconda3
+
+# Metadata
+LABEL maintainer=<zaikinaradmila@gmail.com>
+
+COPY zaikina_env.yml .
+
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update \
+&& apt-get install -y --no-install-recommends apt-utils \
+&& apt-get install -y --no-install-recommends apt-transport-https \
+&& conda env create --quiet -f zaikina_env.yml && conda clean -a \
+```

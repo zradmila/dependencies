@@ -7,8 +7,7 @@ As usual, we will start with a few theoretical questions:
 * [0.5] What is Docker, and how it differs from dependencies management systems? From virtual machines?    
 Docker is a software development tool and a virtualization technology that makes it easy to develop, deploy, and manage applications by using containers. A container refers to a lightweight, stand-alone, executable package of a piece of software that contains all the libraries, configuration files, dependencies, and other necessary parts to operate the application.  
 
-**Docker vs Virtual machines**
-A virtual machine is a computer file or software usually termed as a guest, or an image that is created within a computing environment called the host. 
+**Docker vs Virtual machines**  
 1. Architecture - VMs have the host OS and guest OS inside each VM. A guest OS can be any OS, like Linux or Windows, irrespective of the host OS. In contrast, Docker containers host on a single physical server with a host OS, which shares among them. Sharing the host OS between containers makes them light and increases the boot time. Docker containers are considered suitable to run multiple applications over a single OS kernel; whereas, virtual machines are needed if the applications or services required to run on different OS. 
 2. Security - Virtual Machines are stand-alone with their kernel and security features. Therefore, applications needing more privileges and security run on virtual machines. On the flip side, providing root access to applications and running them with administrative premises is not recommended in the case of Docker containers because containers share the host kernel. The container technology has access to the kernel subsystems; as a result, a single infected application is capable of hacking the entire host system.
 3. Portability - VMs are isolated from their OS, and so they are not ported across multiple platforms without incurring compatibility issues. At the development level, if an application is to be tested on different platforms, then Docker containers must be considered. 
@@ -35,14 +34,14 @@ A virtual machine is a computer file or software usually termed as a guest, or a
  **Container** is a runnable instance of an image. It is possible to create, start, stop, move, or delete a container using the Docker API or CLI. Docker allows to connect a container to one or more networks, attach storage to it, or even create a new image based on its current state.
 By default, a container is relatively well isolated from other containers and its host machine. We can control how isolated a container’s network, storage, or other underlying subsystems are from other containers or from the host machine. A container is defined by its image as well as any configuration options a user provide to it when they create or start it. When a container is removed, any changes to its state that are not stored in persistent storage disappear.  
 
-Container can be created with the command:
-`docker create [OPTIONS] IMAGE [COMMAND] [ARG...]`
-The docker daemon creates a writeable container layer over the specified image and prepares it for running the specified command.
-The comand that is used to run container:
-`docker run [OPTIONS] IMAGE [COMMAND] [ARG...]`
-The docker run command first creates a writeable container layer over the specified image, and then starts it using the specified command.
-Containers can be destroyed by:
-`docker kill [OPTIONS] CONTAINER [CONTAINER...]`
+Container can be created with the command:  
+`docker create [OPTIONS] IMAGE [COMMAND] [ARG...]`  
+The docker daemon creates a writeable container layer over the specified image and prepares it for running the specified command.  
+The comand that is used to run container:  
+`docker run [OPTIONS] IMAGE [COMMAND] [ARG...]`  
+The docker run command first creates a writeable container layer over the specified image, and then starts it using the specified command.  
+Containers can be destroyed by:  
+`docker kill [OPTIONS] CONTAINER [CONTAINER...]`  
 
 * [0.25] Name and describe at least one Docker competitor (i.e., a tool based on the same containerization technology).  
 
@@ -55,10 +54,8 @@ If you’re running multiple containerized applications, you can combine Docker 
 
 * [0.25] What is conda? How it differs from apt, yarn, and others?   
 
-**Conda** is an open-source, cross-platform, language-agnostic package manager and environment management system. Conda allows users to easily install different versions of binary software packages and any required libraries appropriate for their computing platform. Also, it allows users to switch between package versions and download and install updates from a software repository. 
+**Conda** is an open-source, cross-platform, language-agnostic package manager and environment management system. Conda allows users to easily install different versions of binary software packages and any required libraries appropriate for their computing platform. Also, it allows users to switch between package versions and download and install updates from a software repository.    
 In comparison to other package manageres,  packages installed with conda are installed locally with a user-specific configuration. Administrative privileges are not required, and no upstream files or other users are affected by the installation.
-
-
 
 ## Problem [6.5]
 
@@ -93,21 +90,24 @@ conda create env -n zaikina_env
 ```
 Then the environment was activated by
 ```
-conda activate zaikina env
+conda activate zaikina_env
 ```
 ## Bioinformatics tools installation
 For a proper installation, bioconda and conda-forge channels were used.
 ```
-conda install -c bioconda fastqc=0.11.9   
-conda install -c bioconda star=2.7.10b    
-conda install -c bioconda bedtools=v2.30.0     
-conda install -c bioconda multiqc=1.13       
-conda install -c conda-forge -c bioconda samtools=1.16.1   
-conda install -c  bioconda picard=2.27.4  
-conda install -c  bioconda salmon
+conda config --add channels bioconda
+conda config --add channels conda-forge
 ```
-I had to lower the version of picard because dowload just freezed. The same thing was with salmon tool, so I installed the available version of this tool.
-
+Adding mentioned channels to config allowed to install tools in this manner without specifying channel:
+```
+conda install -y fastqc=0.11.9
+conda install -y star=2.7.10b
+conda install -y samtools=1.16.1 
+conda install -y picard=2.27.5
+conda install -y salmon=1.9.0
+conda install -y bedtools=2.30.0
+conda install -y multiqc=1.13
+```
 ## Environment export 
 Created environment was exported with this command:
 ```
@@ -118,14 +118,30 @@ Then my environment was deactivated and removed:
 conda deactivate 
 conda remove -n zaikina_env --all
 ```
-
+zaikina_env.yml:
+```
+name: zaikina_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - fastqc=0.11.9
+  - star=2.7.10b
+  - samtools=1.16.1
+  - picard=2.27.5
+  - salmon=1.9.0
+  - bedtools=2.30.0
+  - multiqc=1.13
+prefix: /home/rada/anaconda3/envs/zaikina_env
+```
 ## Rebuild conda environment  
 To rebuild environment from a file:
 ```
 conda env create -f zaikina_env.yml
 ``` 
-
-**Docker**:
+----------
+## Docker:
 * [3] Create a Dockerfile for a container with **all** required dependencies. Don't forget about comments; test that all tools are accessible and work inside the container. Hints:
  - If needed, grant rights to execute downloaded/compiled binaries using chmod (`chmod a+x BINARY_NAME`)
  - Move all executables to $PATH folders (e.g.`/usr/local/bin`) to make them accessible without specifying the full path.
@@ -133,7 +149,8 @@ conda env create -f zaikina_env.yml
 * [1] Use [hadolint](https://hadolint.github.io/hadolint/) and remove as many reported warnings as possible.
 * [0.5] Add relevant [labels](https://docs.docker.com/engine/reference/builder/#label), e.g. maintainer, version, etc. ([hint](https://medium.com/@chamilad/lets-make-your-docker-image-better-than-90-of-existing-ones-8b1e5de950d))
 
-In a text editor, I created a Dockerfile with all command that should be run to install required packages.
+## Dockerfile creation  
+In a text editor, I created a Dockerfile with all commands that should be run to install required packages.
 ```
 FROM ubuntu
 
@@ -192,7 +209,7 @@ RUN pip install multiqc==1.13
 ```
 ## Docker build 
 ```
-docker build -t boinf_tools .
+docker build -t bionf_tools .
 ```
 `-t` - the image name
 `.` - means that a Dockerfile is in a current directory 

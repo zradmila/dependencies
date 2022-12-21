@@ -1,34 +1,64 @@
 # Dependencies management 
 
-**Introduction**
-
 ## Theory [2]
 
 As usual, we will start with a few theoretical questions:
 
 * [0.5] What is Docker, and how it differs from dependencies management systems? From virtual machines?    
-Docker is an open platform for developing, shipping, and running applications. Docker provides the ability to package and run an application in a loosely isolated environment called a container. The isolation and security allows to run many containers simultaneously on a given host. Containers are lightweight and contain everything needed to run the application, so there is no need to rely on what is currently installed on the host. It provides an easy way to share containers while working, and be sure that everyone who uses it gets the same container that works in the same way.
+Docker is a software development tool and a virtualization technology that makes it easy to develop, deploy, and manage applications by using containers. A container refers to a lightweight, stand-alone, executable package of a piece of software that contains all the libraries, configuration files, dependencies, and other necessary parts to operate the application.  
 
-Docker is a technology for creating and managing containers
+**Docker vs Virtual machines**
+A virtual machine is a computer file or software usually termed as a guest, or an image that is created within a computing environment called the host. 
+1. Architecture - VMs have the host OS and guest OS inside each VM. A guest OS can be any OS, like Linux or Windows, irrespective of the host OS. In contrast, Docker containers host on a single physical server with a host OS, which shares among them. Sharing the host OS between containers makes them light and increases the boot time. Docker containers are considered suitable to run multiple applications over a single OS kernel; whereas, virtual machines are needed if the applications or services required to run on different OS. 
+2. Security - Virtual Machines are stand-alone with their kernel and security features. Therefore, applications needing more privileges and security run on virtual machines. On the flip side, providing root access to applications and running them with administrative premises is not recommended in the case of Docker containers because containers share the host kernel. The container technology has access to the kernel subsystems; as a result, a single infected application is capable of hacking the entire host system.
+3. Portability - VMs are isolated from their OS, and so they are not ported across multiple platforms without incurring compatibility issues. At the development level, if an application is to be tested on different platforms, then Docker containers must be considered. 
+4. Perfomance - Virtual Machines are more resource-intensive than Docker containers as the virtual machines need to load the entire OS to start.
+
 * [0.5] What are the advantages and disadvantages of using containers over other approaches?  
- **Advantages**  
+ **Advantages** 
+1. Light and minimal overhead – Docker images are typically very small, which promotes rapid delivery and reduces the time to deploy new application containers.
+2. Rapid deployment – containers carry the minimal runtime requirements of the application, decreasing their size and enabling them to be deployed instantly.  
+3. Portability – an application and all its dependencies can be grouped into a separate container that is autonomous from the host version of Linux kernel, platform configuration, or deployment type.
+4. Version control and component retain – it is possible to pursue succeeding versions of a container, inspect irregularities or go back to previous versions. Containers reuse segments from the preceding layers, which makes them remarkably light.
+5. Sharing – it allows to use a distant repository to share your container with others.
+
  **Disadvantages**  
+1.  There are some applications that are not suited for Docker and should be run on a dedicated machine. Applications that have many services that need to seamlessly work together might be an example since Docker containers are meant to only do one thing. This would require a separate container for each service.
+2.  Difficult to manage large amount of containers.
 
 * [0.5] Explain how Docker works: what are Dockerfiles, how are containers created, and how are they run and destroyed?  
 
  **Dockerfile** is a text document that contains all the commands a user could call on the command line to assemble an image. Docker can build images automatically by reading the instructions from a Dockerfile.  
    
- **Image** is a read-only template with instructions for creating a Docker container. Often, an image is based on another image, with some additional customization. It is possible to create your own images or use those created by others and published in a registry. To build your own image, you create a Dockerfile with a simple syntax for defining the steps needed to create the image and run it. Each instruction in a Dockerfile creates a layer in the image. When you change the Dockerfile and rebuild the image, only those layers which have changed are rebuilt. This is part of what makes images so lightweight, small, and fast, when compared to other virtualization technologies.  
+ **Image** is a read-only template with instructions for creating a Docker container. Often, an image is based on another image, with some additional customization. It is possible to create your own images or use those created by others and published in a registry. To build an image, a user create a Dockerfile with a simple syntax for defining the steps needed to create the image and run it. Each instruction in a Dockerfile creates a layer in the image. When changes are applied to the Dockerfile and the image is rebuilt, only those layers which have changed are rebuilt. This is part of what makes images so lightweight, small, and fast, when compared to other virtualization technologies.  
 
- **Container** is a runnable instance of an image. We can create, start, stop, move, or delete a container using the Docker API or CLI. You can connect a container to one or more networks, attach storage to it, or even create a new image based on its current state.
-By default, a container is relatively well isolated from other containers and its host machine. You can control how isolated a container’s network, storage, or other underlying subsystems are from other containers or from the host machine.
-A container is defined by its image as well as any configuration options you provide to it when you create or start it. When a container is removed, any changes to its state that are not stored in persistent storage disappear.  
+ **Container** is a runnable instance of an image. It is possible to create, start, stop, move, or delete a container using the Docker API or CLI. Docker allows to connect a container to one or more networks, attach storage to it, or even create a new image based on its current state.
+By default, a container is relatively well isolated from other containers and its host machine. We can control how isolated a container’s network, storage, or other underlying subsystems are from other containers or from the host machine. A container is defined by its image as well as any configuration options a user provide to it when they create or start it. When a container is removed, any changes to its state that are not stored in persistent storage disappear.  
+
+Container can be created with the command:
+`docker create [OPTIONS] IMAGE [COMMAND] [ARG...]`
+The docker daemon creates a writeable container layer over the specified image and prepares it for running the specified command.
+The comand that is used to run container:
+`docker run [OPTIONS] IMAGE [COMMAND] [ARG...]`
+The docker run command first creates a writeable container layer over the specified image, and then starts it using the specified command.
+Containers can be destroyed by:
+`docker kill [OPTIONS] CONTAINER [CONTAINER...]`
 
 * [0.25] Name and describe at least one Docker competitor (i.e., a tool based on the same containerization technology).  
 
+**Kubernetes** (aka K8) is an open-source container automation system developed by Google to manage container applications in physical, virtual, or cloud environments. Kubernetes functions as an orchestrator that controls thousands of containers and workloads.  
+If you’re running multiple containerized applications irrespective of their hosting platforms, you will be needing Kubernetes, which serves as an API for coordinating, controlling, scheduling, and automating multiple containers. 
+Although Docker performs a similar orchestration function, unlike Kubernetes, it can only manage a node (made of a cluster of containers), and it does not have an automatic node rescheduling feature for rescheduling inactive nodes. 
+In contrast, Kubernetes can easily and efficiently manage multiple clusters (multiple nodes) and automatically reschedule inactive nodes.
+
+If you’re running multiple containerized applications, you can combine Docker with Kubernetes. Kubernetes lets you manage and control multiple containers from a single machine and helps you network, do load-balancing, and security upscaling across all your container nodes.
+
 * [0.25] What is conda? How it differs from apt, yarn, and others?   
-  **Conda** is an open source package management system and environment management system.   
-  In comparison to other package manageres, conda can work locally. It can work for each user independently and does not require admin's permission.
+
+**Conda** is an open-source, cross-platform, language-agnostic package manager and environment management system. Conda allows users to easily install different versions of binary software packages and any required libraries appropriate for their computing platform. Also, it allows users to switch between package versions and download and install updates from a software repository. 
+In comparison to other package manageres,  packages installed with conda are installed locally with a user-specific configuration. Administrative privileges are not required, and no upstream files or other users are affected by the installation.
+
+
 
 ## Problem [6.5]
 
@@ -281,6 +311,7 @@ FROM continuumio/anaconda3
 # Metadata
 LABEL maintainer=<zaikinaradmila@gmail.com>
 
+#
 COPY zaikina_env.yml .
 
 ARG DEBIAN_FRONTEND=noninteractive

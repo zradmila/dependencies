@@ -1,6 +1,5 @@
 # Dependencies management 
 
-## Theory [2]
 
 As usual, we will start with a few theoretical questions:
 

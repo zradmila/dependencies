@@ -200,3 +200,15 @@ sudo jbrowse add-track /home/rpzaikina/nr3c1_chipseq_sorted_renamed.bed.gz --loa
 Hint: to specify the config, use the config=PATH query parameter. E.g. `http://64.129.58.13/jbrowse/?config=my_folder%2Fconfig.json` where `my_folder%2Fconfig.json` is the [escaped](https://en.wikipedia.org/wiki/Percent-encoding) path to the config file.
 
 * [0.5] Give an in-depth explanation of the OSI model and how the TCP/IP stack works. Don't copy-paste descriptions from the internet; paraphrase and shorten as much as possible (imagine writing a cheat sheet for yourself)
+
+Open Systems Interconnection (OSI) model provides a standard for different computer systems to be able to communicate with each other (universal language for computer networking). A communication system is split into **seven** abstract layer, each one stacked upon the last.  
+**--- software layers ---**
+1. Physical layer 
+2. Data link layer 
+3. Network layer  
+**--- heart of OSI ---**  
+4. Transport layer   
+**--- hardware layerss ---**  
+5. Session layer
+6. Presentation layer 
+7. Application layer 

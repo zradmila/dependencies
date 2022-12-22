@@ -180,9 +180,17 @@ sudo nginx -s reload
 ```
 and I was able to access the browser using a link http://51.250.40.42/jbrowse/  
 
-* [1] Add your files (BED & FASTA & GFF3) to the genome browser and verify that everything works as intended. Don't forget to [index](https://jbrowse.org/jb2/docs/cli/#jbrowse-text-index) the genome annotation, so you could later search by gene names.
+* [1] Add your files (BED & FASTA & GFF3) to the genome browser and verify that everything works as intended. Don't forget to [index](https://jbrowse.org/jb2/docs/cli/#jbrowse-text-index) the genome annotation, so you could later search by gene names. 
 
-**Remember to put a [persistent link](https://jbrowse.org/jb2/docs/user_guides/basic_usage/#sharing-sessions) to a JBrowse 2 session with all your BED files and the genome annotation in the report (like [this](https://jbrowse.org/code/jb2/v2.3.1/?session=share-HShsEcnq3i&password=nYzTU)). I must be able to access it without problems.**
+I add fasta with `add-assembly` option and GFF and BED files via `add-track` option.
+```
+sudo jbrowse add-assembly /home/rpzaikina/Homo_sapiens.GRCh38.dna.primary_assembly.fa --load copy --out /mnt/JBrowse/
+sudo jbrowse add-track /home/rpzaikina/Homo_sapiens.GRCh38.108.sorted.gff3.gz --load copy --out /mnt/JBrowse/
+sudo jbrowse add-track /home/rpzaikina/znf77_chipseq_sorted_renamed.bed.gz --load copy --out /mnt/JBrowse/
+sudo jbrowse add-track /home/rpzaikina/zn124_chipseq_sorted_renamed.bed.gz --load copy --out /mnt/JBrowse/
+sudo jbrowse add-track /home/rpzaikina/nr3c1_chipseq_sorted_renamed.bed.gz --load copy --out /mnt/JBrowse/
+````
+**Link to the final result:** http://51.250.40.42/jbrowse/?session=share-AeQmqjR54k&password=cSJHm
 -------
 -------
 ## Extra points [1.5]

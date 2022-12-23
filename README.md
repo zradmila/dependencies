@@ -202,12 +202,11 @@ Hint: to specify the config, use the config=PATH query parameter. E.g. `http://6
 * [0.5] Give an in-depth explanation of the OSI model and how the TCP/IP stack works. Don't copy-paste descriptions from the internet; paraphrase and shorten as much as possible (imagine writing a cheat sheet for yourself)
 
 Open Systems Interconnection (OSI) model provides a standard for different computer systems to be able to communicate with each other (universal language for computer networking). A communication system is split into **seven** abstract layer, each one stacked upon the last.  
-
 **--- hardware layerss ---**  
 7. Application layer 
     * directly interacts with data from the user - software applications (web browsers, email clients, etc.) rely on the application layer to initiate communications
     * responsible for the protocols and data manipulation that the software relies on to present meaningful data to the user
-    * application layer protocols include HTTP as well as SMTP (Simple Mail Transfer Protocol is one of the protocols that enables email communications).
+    * application layer protocols include HTTP as well as SMTP (Simple Mail Transfer Protocol is one of the protocols that enables email communications)  
 6. Presentation layer
     * preparation data so that it can be used by the application layer; in other words
       *  translation - communicating devices may be using different encoding methods

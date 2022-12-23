@@ -201,7 +201,7 @@ Hint: to specify the config, use the config=PATH query parameter. E.g. `http://6
 
 Open Systems Interconnection (OSI) model provides a standard for different computer systems to be able to communicate with each other (universal language for computer networking).
 7 abstract layers, from the highest one to the lowest:  
-**--- hardware layers ---** 
+**--- software layers ---** 
 
 1. Application layer 
     * directly interacts with data from the user - software applications (web browsers, email clients, etc.) rely on the application layer to initiate communications
@@ -229,7 +229,7 @@ Open Systems Interconnection (OSI) model provides a standard for different compu
     * flow control and error control
       * flow control determines an optimal speed of transmission to ensure that a sender with a fast connection does not overwhelm a receiver with a slow connection.       * error control on the receiving end by ensuring that the data received is complete, and requesting a retransmission if it isn’t. 
   
-**--- software layers ---**
+**--- hardware layers ---**
 
 5. Network layer 
     * facilitates data transfer between **two different** networks. 

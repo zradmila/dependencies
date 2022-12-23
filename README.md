@@ -199,8 +199,8 @@ Hint: to specify the config, use the config=PATH query parameter. E.g. `http://6
 
 * [0.5] Give an in-depth explanation of the OSI model and how the TCP/IP stack works. Don't copy-paste descriptions from the internet; paraphrase and shorten as much as possible (imagine writing a cheat sheet for yourself)
 
-Open Systems Interconnection (OSI) model provides a standard for different computer systems to be able to communicate with each other (universal language for computer networking). A communication system is split into **seven** abstract layers, each one stacked upon the last.  
-From the highest one to the lowest:  
+Open Systems Interconnection (OSI) model provides a standard for different computer systems to be able to communicate with each other (universal language for computer networking).
+7 abstract layers, from the highest one to the lowest:  
 **--- hardware layers ---** 
 
 1. Application layer 
@@ -209,7 +209,7 @@ From the highest one to the lowest:
     * application layer protocols include HTTP as well as SMTP (Simple Mail Transfer Protocol is one of the protocols that enables email communications)  
     
 2. Presentation layer
-    * preparation data so that it can be used by the application layer; in other words
+    * preparation data so that it can be used by the application layer
       *  translation - communicating devices may be using different encoding methods
       *  encryption - if the devices are communicating over an encrypted connection, layer 6 is responsible for adding the encryption on the sender’s end as well as decoding the encryption on the receiver's end so that it can present the application layer with unencrypted, readable data.
       * compression - helps improve and efficiency by minimizing the size of transferring data.

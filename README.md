@@ -3,6 +3,7 @@
 ## Theory [2]
 
 * [0.4] What are [computer ports](https://www.cloudflare.com/learning/network-layer/what-is-a-computer-port/) on a high level? How many ports are there on a typical computer?  
+
 A **port** is a virtual point where network connections start and end. Ports are software-based and managed by a computer's operating system. Each port is associated with a specific process or service. Ports allow computers to easily differentiate between different kinds of traffic: emails go to a different port than webpages, for instance, even though both reach a computer over the same Internet connection.  
 * [0.4] What is the difference between http, https, ssh, and other protocols? In what sense are they similar? Name default ports for several data transfer protocols.
 
@@ -18,15 +19,11 @@ Port Number | Usage
 20          | File Transfer Protocol (FTP) Data Transfer
 21          | File Transfer Protocol (FTP) Command Control
 22          | Secure Shell (SSH)
-23          |Telnet - Remote login service, unencrypted text messages
 25 | Simple Mail Transfer Protocol (SMTP) E-mail Routing
 53 | Domain Name System (DNS) service
 80 | Hypertext Transfer Protocol (HTTP) used in World Wide Web
 110 | Post Office Protocol (POP3) used by e-mail clients to retrieve e-mail from a server
-119 |Network News Transfer Protocol (NNTP)
-123 | Network Time Protocol (NTP)
 143 | Internet Message Access Protocol (IMAP) Management of Digital Mail
-161 | Simple Network Management Protocol (SNMP)
 194 | Internet Relay Chat (IRC)
 443 | HTTP Secure (HTTPS) HTTP over TLS/SSL
 
@@ -36,8 +33,7 @@ Port Number | Usage
 (2) A public IP address identifies you to the wider internet so that all the information you’re searching for can find you. A private IP address is used within a private network to connect securely to other devices within that same network.  
 (3) When we enter 'google.com' into the web browser, the following things happens:
 - The browser checks the cache for a DNS record to find the corresponding IP address of maps.google.com.
-DNS(Domain Name System) is a database that maintains the name of the website (URL) and the particular IP address it links to. Every single URL on the internet has a unique IP address assigned to it. The IP address belongs to the computer which hosts the server of the website we are requesting to access.
-To find the DNS record, the browser checks four caches: browser cache, OS cache, router cache and ISP cache. 
+DNS(Domain Name System) is a database that maintains the name of the website (URL) and the particular IP address it links to. To find the DNS record, the browser checks four caches: browser cache, OS cache, router cache and ISP cache. 
 -  If the requested URL is not in the cache, ISP’s DNS server initiates a DNS query to find the IP address of the server that hosts google.com.
 - The browser initiates a TCP connection with the server.
 - The browser sends an HTTP request to the webserver.
@@ -46,15 +42,17 @@ To find the DNS record, the browser checks four caches: browser cache, OS cache,
 - The browser displays the HTML content (for HTML responses, which is the most common)
 
 * [0.4] What is Nginx? How does it work on the high level? List several alternative web servers.  
-**NGINX** is an open source software for web serving, reverse proxying, caching, load balancing, media streaming, and more. It started out as a web server designed for maximum performance and stability. In addition to its HTTP server capabilities, NGINX can also function as a proxy server for email (IMAP, POP3, and SMTP) and a reverse proxy and load balancer for HTTP, TCP, and UDP servers.  
-**Alternative web servers**: HAProxy, Traefik, Caddy
-* [0.4] What is SSH, and for what is it typically used? Explain two ways to authenticate in an SSH server in detail.  
-**SSH** is a cryptographic protocol for connecting to network services over an unsecured network. Common applications for SSH are remote login and remotely executing commands on Linux hosts, but that only scratches the surface of what you can do with SSH.  
-The protocol covers 3 main areas.
-- Authentication - authentication involves proving a user or a machine’s identity; that is, who they claim to be. For SSH, the authentication method means confirming that the user has the correct credentials to access the SSH Server.  
-- Encryption - SSH is an encrypted protocol, so the data is unintelligible except to the intended recipients.  
-- Integrity - SSH guarantees that the data traveling over the network arrives unaltered. If a third party was to modify traffic during transit, SSH would detect this.
 
+**NGINX** is an open source software for web serving, reverse proxying, caching, load balancing, media streaming, and more. It started out as a web server designed for maximum performance and stability. In addition to its HTTP server capabilities, NGINX can also function as a proxy server for email (IMAP, POP3, and SMTP) and a reverse proxy and load balancer for HTTP, TCP, and UDP servers. NGINX performs with an asynchronous, event-driven architecture: similar threads are managed under one worker process, and each worker process contains smaller units called **worker connections**. This whole unit is then responsible for handling concurrent requests. Worker connections deliver the requests to a worker process, which will also send it to the master process. Finally, the master process provides the result of those requests.    
+**Alternative web servers**: HAProxy, Traefik, Caddy
+
+* [0.4] What is SSH, and for what is it typically used? Explain two ways to authenticate in an SSH server in detail. 
+
+**SSH** is a cryptographic protocol for connecting to network services over an unsecured network. Common applications for SSH are remote login and remotely executing commands on Linux hosts, but that only scratches the surface of what you can do with SSH.  
+Two ways to authenticate in an SSH server:
+    * Password authentication (using user name and passwords) - after establishing secure connection with remote servers, SSH users usually pass on their usernames and passwords to remote servers for client authentication. These credentials are shared through the secure tunnel established by symmetric encryption. The server checks for these credentials in the database and, if found, authenticates the client and allows it to communicate.
+    * Public key-based authentication (using public and private key pairs) - after the client establishes a connection with the remote server, the client informs the server of the key pair it would like to authenticate itself with. The server verifies the existence of this key pair in its database and then sends an encrypted message to the client. The client decrypts the message with it’s private key and generates a hash value which is sent back to the server for verification. The server generates its own hash value and compares it with the one sent from the client. When both the hash values match, the server is convinced of the client’s authenticity and allows it to communicate with the server.  
+    
 ## Problem [6.5]
 
 A real-life situation that occurred to me several times over the years.
@@ -100,7 +98,7 @@ tabix -p gff Homo_sapiens.GRCh38.108.sorted.gff3.gz
 ```
 * [1] Select and download BED files for three ChIP-seq and one ATAC-seq experiment from the ENCODE (use one tissue/cell line). Sort, bgzip, and index them using tabix.
 
-I choosed the K562 cell line.
+I chose the K562 cell line.
 [ATAC-seq experiment](https://www.encodeproject.org/experiments/ENCSR868FGK/)
 [ZN124 ChIP-seq](https://www.encodeproject.org/experiments/ENCSR124YFA/)
 [ZNF77 ChIP-seq](https://www.encodeproject.org/experiments/ENCSR844MAB/)
@@ -201,21 +199,22 @@ Hint: to specify the config, use the config=PATH query parameter. E.g. `http://6
 
 * [0.5] Give an in-depth explanation of the OSI model and how the TCP/IP stack works. Don't copy-paste descriptions from the internet; paraphrase and shorten as much as possible (imagine writing a cheat sheet for yourself)
 
-Open Systems Interconnection (OSI) model provides a standard for different computer systems to be able to communicate with each other (universal language for computer networking). A communication system is split into **seven** abstract layer, each one stacked upon the last.  
+Open Systems Interconnection (OSI) model provides a standard for different computer systems to be able to communicate with each other (universal language for computer networking). A communication system is split into **seven** abstract layers, each one stacked upon the last.  
+From te highest one to the lowest:  
 **--- hardware layers ---** 
 
-7. Application layer 
+1. Application layer 
     * directly interacts with data from the user - software applications (web browsers, email clients, etc.) rely on the application layer to initiate communications
     * responsible for the protocols and data manipulation that the software relies on to present meaningful data to the user
     * application layer protocols include HTTP as well as SMTP (Simple Mail Transfer Protocol is one of the protocols that enables email communications)  
     
-6. Presentation layer
+2. Presentation layer
     * preparation data so that it can be used by the application layer; in other words
       *  translation - communicating devices may be using different encoding methods
       *  encryption - if the devices are communicating over an encrypted connection, layer 6 is responsible for adding the encryption on the sender’s end as well as decoding the encryption on the receiver's end so that it can present the application layer with unencrypted, readable data.
       * compression - helps improve and efficiency by minimizing the size of transferring data.
 
-5. Session layer 
+3. Session layer 
     * opening and closing communication between the two devices
       * session -  the time between when the communication is opened and closed; the session layer ensures that the session stays open long enough to transfer all the data being exchanged, and then promptly closes the session in order to avoid wasting resources.
     * synchronizes data transfer with checkpoints
@@ -232,20 +231,30 @@ Open Systems Interconnection (OSI) model provides a standard for different compu
   
 **--- software layers ---**
 
-3. Network layer 
+5. Network layer 
     * facilitates data transfer between **two different** networks. 
         *  if the two devices communicating are on the **same** network, then the network layer is unnecessary
     * breaks up segments from the transport layer into smaller units, called **packets**, on the *sender’s device*, and reassembling these packets on the receiving device. 
     * finds the best physical path for the data to reach its destination - routing.
     
-2. Data link layer 
+6. Data link layer 
     * facilitates data transfer between two devices on the **same** network
     * takes packets from the network layer and breaks them into smaller pieces called **frames**. 
     * flow control and error control in **intra-network** communication
     sending cable --> bit stream --> receiving cable  
     
-1. Physical layer 
+7. Physical layer 
     *  includes a physical equipment involved in the data transfer, such as the cables and switches
     *  data gets converted into a bit stream (string of 1s and 0s) 
-  
+    
+The OSI model describes an idealized network communications with a family of protocols. TCP/IP does not correspond to this model directly. TCP/IP either combines several OSI layers into a single layer, or does not use certain layers at all.
+
+TCP/IP is a network model describing the process of digital data transmission. TCP/IP provides end-to-end data communication specifying how data should be packetized, addressed, transmitted, routed, and received. This functionality is organized into four abstraction layers, an implementation of the layers for a particular application forms a **protocol stack**.
+1. Link layer - communication methods for data that remains within a single network segment (link)  
+2. Internet layer (IP) - internetworking between independent networks 
+3. Transport layer (TCP) - host-to-host communication  
+    * divides the message received from the session layer into segments and numbers them to make a sequence.
+    * makes sure that the message is delivered to the correct process on the destination machine
+    * makes sure that the entire message arrives without any error else it should be retransmitted.
+4. Application layer - process-to-process data exchange for applications.
 

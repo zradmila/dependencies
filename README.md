@@ -9,22 +9,22 @@ A **port** is a virtual point where network connections start and end. Ports are
 
 All of them are protocols to communicate between client and server.
 The **Hypertext Transfer Protocol (HTTP)** is the foundation of the World Wide Web, and is used to load webpages using hypertext links. HTTP is an application layer protocol designed to transfer information between networked devices and runs on top of other layers of the network protocol stack. A typical flow over HTTP involves a client machine making a request to a server, which then sends a response message.  
-**Hypertext transfer protocol secure (HTTPS)** is the secure version of HTTP, which is the primary protocol used to send data between a web browser and a website. HTTPS is encrypted in order to increase security of data transfer. This is particularly important when users transmit sensitive data, such as by logging into a bank account, email service, or health insurance provider.  
-HTTPS uses an encryption protocol to encrypt communications. The protocol is called Transport Layer Security (TLS), although formerly it was known as Secure Sockets Layer (SSL). This protocol secures communications by using what’s known as an asymmetric public key infrastructure. This type of security system uses two different keys to encrypt communications between two parties: the private key and the public key.  
+
+**Hypertext transfer protocol secure (HTTPS)** is the secure version of HTTP, which is the primary protocol used to send data between a web browser and a website. HTTPS is encrypted in order to increase security of data transfer. This is particularly important when users transmit sensitive data, such as by logging into a bank account, email service, or health insurance provider. 
+
 **SSH or Secure Shell** is a network communication protocol that enables two computers to communicate (c.f http or hypertext transfer protocol, which is the protocol used to transfer hypertext such as web pages) and share data. An inherent feature of ssh is that the communication between the two computers is encrypted meaning that it is suitable for use on insecure networks.
 
-SSL(HTTPS) is used to encrypt communication between Browser and Server. Whereas SSH is used to encrypt communication between Two Computers. One computer securely accessing a remote computer → Copy Files Between Computers, host a git repo on another old computer in your house instead of using GitHub as your remote backup .
+SSL(HTTPS) is used to encrypt communication between Browser and Server. Whereas SSH is used to encrypt communication between Two Computers. One computer securely accessing a remote computer → Copy Files Between Computers, host a git repo on another old computer in your house instead of using GitHub as your remote backup .  
+
 Port Number | Usage
 ------------|-------
 20          | File Transfer Protocol (FTP) Data Transfer
 21          | File Transfer Protocol (FTP) Command Control
 22          | Secure Shell (SSH)
-25 | Simple Mail Transfer Protocol (SMTP) E-mail Routing
 53 | Domain Name System (DNS) service
 80 | Hypertext Transfer Protocol (HTTP) used in World Wide Web
 110 | Post Office Protocol (POP3) used by e-mail clients to retrieve e-mail from a server
 143 | Internet Message Access Protocol (IMAP) Management of Digital Mail
-194 | Internet Relay Chat (IRC)
 443 | HTTP Secure (HTTPS) HTTP over TLS/SSL
 
 * [0.4] Explain briefly: (1) what is IP, (2) what IPs are called 'white'/public, (3) and what happens when you enter 'google.com' into the web browser. 
@@ -200,7 +200,7 @@ Hint: to specify the config, use the config=PATH query parameter. E.g. `http://6
 * [0.5] Give an in-depth explanation of the OSI model and how the TCP/IP stack works. Don't copy-paste descriptions from the internet; paraphrase and shorten as much as possible (imagine writing a cheat sheet for yourself)
 
 Open Systems Interconnection (OSI) model provides a standard for different computer systems to be able to communicate with each other (universal language for computer networking). A communication system is split into **seven** abstract layers, each one stacked upon the last.  
-From te highest one to the lowest:  
+From the highest one to the lowest:  
 **--- hardware layers ---** 
 
 1. Application layer 

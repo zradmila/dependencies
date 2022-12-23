@@ -49,8 +49,8 @@ DNS(Domain Name System) is a database that maintains the name of the website (UR
 * [0.4] What is SSH, and for what is it typically used? Explain two ways to authenticate in an SSH server in detail. 
 
 **SSH** is a cryptographic protocol for connecting to network services over an unsecured network. Common applications for SSH are remote login and remotely executing commands on Linux hosts, but that only scratches the surface of what you can do with SSH.  
-Two ways to authenticate in an SSH server:
-    * Password authentication (using user name and passwords) - after establishing secure connection with remote servers, SSH users usually pass on their usernames and passwords to remote servers for client authentication. These credentials are shared through the secure tunnel established by symmetric encryption. The server checks for these credentials in the database and, if found, authenticates the client and allows it to communicate.
+Two ways to authenticate in an SSH server:  
+    * Password authentication (using user name and passwords) - after establishing secure connection with remote servers, SSH users usually pass on their usernames and passwords to remote servers for client authentication. These credentials are shared through the secure tunnel established by symmetric encryption. The server checks for these credentials in the database and, if found, authenticates the client and allows it to communicate.  
     * Public key-based authentication (using public and private key pairs) - after the client establishes a connection with the remote server, the client informs the server of the key pair it would like to authenticate itself with. The server verifies the existence of this key pair in its database and then sends an encrypted message to the client. The client decrypts the message with it’s private key and generates a hash value which is sent back to the server for verification. The server generates its own hash value and compares it with the one sent from the client. When both the hash values match, the server is convinced of the client’s authenticity and allows it to communicate with the server.  
     
 ## Problem [6.5]

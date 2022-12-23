@@ -202,13 +202,43 @@ Hint: to specify the config, use the config=PATH query parameter. E.g. `http://6
 * [0.5] Give an in-depth explanation of the OSI model and how the TCP/IP stack works. Don't copy-paste descriptions from the internet; paraphrase and shorten as much as possible (imagine writing a cheat sheet for yourself)
 
 Open Systems Interconnection (OSI) model provides a standard for different computer systems to be able to communicate with each other (universal language for computer networking). A communication system is split into **seven** abstract layer, each one stacked upon the last.  
-**--- software layers ---**
-1. Physical layer 
-2. Data link layer 
-3. Network layer  
-**--- heart of OSI ---**  
-4. Transport layer   
+
 **--- hardware layerss ---**  
-5. Session layer
-6. Presentation layer 
 7. Application layer 
+    * directly interacts with data from the user - software applications (web browsers, email clients, etc.) rely on the application layer to initiate communications
+    * responsible for the protocols and data manipulation that the software relies on to present meaningful data to the user
+    * application layer protocols include HTTP as well as SMTP (Simple Mail Transfer Protocol is one of the protocols that enables email communications).
+6. Presentation layer
+    * preparation data so that it can be used by the application layer; in other words
+      *  translation - communicating devices may be using different encoding methods
+      *  encryption - if the devices are communicating over an encrypted connection, layer 6 is responsible for adding the encryption on the sender’s end as well as decoding the encryption on the receiver's end so that it can present the application layer with unencrypted, readable data.
+      * compression - helps improve and efficiency by minimizing the size of transferring data.
+
+5. Session layer 
+    * opening and closing communication between the two devices
+      * session -  the time between when the communication is opened and closed; the session layer ensures that the session stays open long enough to transfer all the data being exchanged, and then promptly closes the session in order to avoid wasting resources.
+    * synchronizes data transfer with checkpoints
+       * could set a multiple checkpoints to be able to resumed the session from the last checkpoint in the case of a disconnect or a crush
+**--- heart of OSI ---**  
+4. Transport layer  
+    * end-to-end communication between the two devices
+      *  taking data from the session layer and breaking it up into chunks called **segments** before sending it to layer 3
+      *  the transport layer on the receiving device is responsible for reassembling the segments into data the session layer can consume.
+    * flow control and error control
+      * flow control determines an optimal speed of transmission to ensure that a sender with a fast connection does not overwhelm a receiver with a slow connection.       * error control on the receiving end by ensuring that the data received is complete, and requesting a retransmission if it isn’t.
+**--- software layers ---**
+3. Network layer 
+    * facilitates data transfer between **two different** networks. 
+        *  if the two devices communicating are on the **same** network, then the network layer is unnecessary
+    * breaks up segments from the transport layer into smaller units, called **packets**, on the *sender’s device*, and reassembling these packets on the receiving device. 
+    * finds the best physical path for the data to reach its destination - routing.
+2. Data link layer 
+    * facilitates data transfer between two devices on the **same** network
+    * takes packets from the network layer and breaks them into smaller pieces called **frames**. 
+    * flow control and error control in **intra-network** communication
+    sending cable --> bit stream --> receiving cable 
+1. Physical layer 
+    *  includes a physical equipment involved in the data transfer, such as the cables and switches
+    *  data gets converted into a bit stream (string of 1s and 0s) 
+  
+
